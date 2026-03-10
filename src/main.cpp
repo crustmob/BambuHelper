@@ -19,9 +19,10 @@ void setup() {
 
   loadSettings();        // load first so rotation/colors are ready
   initDisplay();         // now uses dispSettings.rotation
-  initTouch();           // initialize resistive touch
+  // initTouch();        // DISABLED FOR TESTING - might be hanging
   splashEnd = millis() + 2000;
   setBacklight(brightness);
+  Serial.println("Setup complete");
 }
 
 void loop() {
@@ -38,7 +39,7 @@ void loop() {
     return;
   }
 
-  handleTouch();         // check for swipe gestures
+  // handleTouch();      // DISABLED FOR TESTING
   
   handleWiFi();
   handleWebServer();
