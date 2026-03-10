@@ -4,12 +4,21 @@
 // =============================================================================
 //  Display
 // =============================================================================
-#define SCREEN_W        240
+#define SCREEN_W        320   // CYD: 320x240 landscape
 #define SCREEN_H        240
-#define BACKLIGHT_PIN   TFT_BL  // GPIO 13
+#define BACKLIGHT_PIN   TFT_BL  // GPIO 21 (CYD)
 #define BACKLIGHT_CH    0
 #define BACKLIGHT_FREQ  5000
 #define BACKLIGHT_RES   8
+
+// =============================================================================
+//  Touch (XPT2046 resistive)
+// =============================================================================
+#define TOUCH_CS        33
+#define TOUCH_IRQ       36
+#define TOUCH_MOSI      32
+#define TOUCH_MISO      39
+#define TOUCH_CLK       25
 
 // =============================================================================
 //  Color palette (RGB565)

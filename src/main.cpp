@@ -6,9 +6,11 @@
 #include "bambu_mqtt.h"
 #include "config.h"
 #include "bambu_state.h"
+#include "touch_input.h"
 
 static unsigned long splashEnd = 0;
 static unsigned long finishScreenStart = 0;
+static int8_t currentPrinterIndex = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -16,6 +18,7 @@ void setup() {
 
   loadSettings();        // load first so rotation/colors are ready
   initDisplay();         // now uses dispSettings.rotation
+  initTouch();           // initialize resistive touch
   splashEnd = millis() + 2000;
   setBacklight(brightness);
 }
@@ -34,6 +37,8 @@ void loop() {
     return;
   }
 
+  handleTouch();         // check for swipe gestures
+  
   handleWiFi();
   handleWebServer();
 
