@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "display_ui.h"
+#include "display_dual.h"
 #include "settings.h"
 #include "wifi_manager.h"
 #include "web_server.h"
@@ -43,11 +44,19 @@ void loop() {
   handleWebServer();
 
   if (isWiFiConnected() && !isAPMode()) {
-    if (isPrinterConfigured()) {
+    // Check if we have multiple printers configured
+    bool dualMode = (printers[0].config.enabled && printers[1].config.enabled);
+    
+    if (dualMode) {
+      // Dual printer mode - connect to both
+      handleBambuMqtt();  // This handles all enabled printers
+      updateDualView();   // Draw both printers side by side
+    } else if (isPrinterConfigured()) {
       handleBambuMqtt();
     }
 
-    // Auto-select screen based on printer state
+    // Auto-select screen based on printer state (single printer mode)
+    if (!dualMode) {
     BambuState& s = activePrinter().state;
     ScreenState current = getScreenState();
 
@@ -90,7 +99,12 @@ void loop() {
         finishScreenStart = 0;
       }
     }
+    }  // end if (!dualMode)
   }
 
-  updateDisplay();
+  // Update display (single printer mode only - dual mode updates in its own function)
+  bool dualMode = (printers[0].config.enabled && printers[1].config.enabled);
+  if (!dualMode) {
+    updateDisplay();
+  }
 }
